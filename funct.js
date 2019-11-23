@@ -28,16 +28,22 @@ function urlMaker(url, q) {
 //http://dataservice.accuweather.com/locations/v1/cities/{countryCode}/search
 //location key = key
 function getLocationKey() {
-	var lk = null;
 	fetch('http://dataservice.accuweather.com/locations/v1/cities/us/search?apikey=YP9GsGpyqk2uJxUJyHXFAyx7HBZqpA2H&q=Pittsburgh') 
 		.then(response => response.json())
 		.then(data => {
 			console.log(data);
-			lk = data[0].Key;
 			console.log("type:"+typeof data[0].Key +" key: "+data[0].Key);
-			getHourWeather(lk);
+			getHourWeather(data[0].Key);
 		});
-	
+}
+
+function hourWeatherDisplayHelper(iconNum) {
+	//document.getElementById("weatherIcon").classList.add("wi");
+	if (iconNum.length == 2) {
+		document.getElementById("weatherIcon").classList.add("icon-accu"+iconNum);
+	} else {
+		document.getElementById("weatherIcon").classList.add("icon-accu0"+iconNum);
+	}
 }
 
 //get weather for next hour, needs location key
@@ -51,10 +57,10 @@ function getHourWeather(locationKey) {
 		.then(response => response.json())
 		.then(data => {
 		console.log(data);
-		document.getElementById("weatherIcon").classList.add("wi");
-		document.getElementById("weatherIcon").classList.add("icon-accu"+data[0].WeatherIcon);
+		hourWeatherDisplayHelper(data[0].WeatherIcon);
 	});
 }
+
 
 
 
