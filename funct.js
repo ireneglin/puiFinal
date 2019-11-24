@@ -17,7 +17,8 @@ var apiKey = "YP9GsGpyqk2uJxUJyHXFAyx7HBZqpA2H";
 var locationURL = "http://dataservice.accuweather.com/locations/v1/cities/us/search";
 var forecastURL = "http://dataservice.accuweather.com/forecasts/v1/hourly/1hour/";
 
-
+var clientID =  "5e4865c2de614bb4a5b2f590fab22a04";
+var clientSID = "b3d12f5e28c346cf90498bc088870505";
 
 //pull user input from location textbox
 function locationInputGetter() {
@@ -36,7 +37,6 @@ function getLocationKey() {
 		.then(response => response.json())
 		.then(data => {
 			console.log(data);
-			//console.log("type:"+typeof data[0].Key +" key: "+data[0].Key);
 			getHourWeather(data[0].Key);
 		});
 }
@@ -46,8 +46,10 @@ function hourWeatherDisplayHelper(iconNum) {
 	document.getElementById("weatherIcon").className = '';
 
 	//add new classes
+	console.log("iconNum: "+iconNum);
+	console.log("type of iconNum: "+typeof iconNum);
 	document.getElementById("weatherIcon").classList.add("wi");
-	if (iconNum.length == 2) {
+	if (iconNum >= 10) {
 		document.getElementById("weatherIcon").classList.add("icon-accu"+iconNum);
 	} else {
 		document.getElementById("weatherIcon").classList.add("icon-accu0"+iconNum);
