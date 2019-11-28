@@ -19,6 +19,7 @@ var forecastURL = "http://dataservice.accuweather.com/forecasts/v1/hourly/1hour/
 
 var clientID =  "5e4865c2de614bb4a5b2f590fab22a04";
 var clientSID = "b3d12f5e28c346cf90498bc088870505";
+var accessToken;
 
 //pull user input from location textbox
 function locationInputGetter() {
@@ -69,6 +70,38 @@ function getHourWeather(locationKey) {
 		hourWeatherDisplayHelper(data[0].WeatherIcon);
 	});
 }
+
+
+//redirect user to spotify login
+function getAuthorization() {
+	var url = "https://accounts.spotify.com/authorize";
+	var newURL = url.concat("?client_id=", clientID,
+		"&redirect_uri=http://localhost:8000","&response_type=token");
+	console.log(newURL);
+
+	//redirect to login for spotify
+	window.location.replace(newURL);
+}
+
+//get access token from spotify user using implicit grant flow
+function getAccessToken() {
+	var currURL = window.location.href;
+	var token;
+
+	//if access grant, saves access token
+	/* http://localhost:8000/
+	#access_token=BQCHeBl0bc3knSu7ykvXQ_uNnwhBoASejXEPCjl2JxqOn9u7ntCHt2O7zBmidGg
+	UTeWnEadH0dfRhrYF71u_cEBbcj9vx8UX2ljUz1KU3W-ZlB0Pyc_Cj9pn2Q1BmzOPhM-SckwkzCIdA
+	EOOiv-lc3JqcR3WPozzQZU&token_type=Bearer&expires_in=3600*/
+	if (currURL.includes("access_token",22) == true) {
+		token = window.location.hash.replace(/(#access_token=)/, "");
+		accessToken = token.replace(/(&token_type=Bearer&expires_in=3600)/, "")
+		console.log(accessToken);
+	}
+}
+
+
+
 
 
 

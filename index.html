@@ -29,11 +29,13 @@ MVP to do:
         <title>AccuSpot</title>
     </head>
 
-    <body onload="getLocationKey()">
+    <body onload="getAccessToken()">
         <h1>Accuweather + Spotify</h1>
         
         <!--landing / on boarding screen-->
-
+        <div>
+            <a onclick="getAuthorization()">connect to spotify</a>
+        </div>
 
         <!--select location / weather-->
         <div class="input-group mb-3">
