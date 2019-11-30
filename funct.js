@@ -126,7 +126,9 @@ function getHourWeather(locationKey) {
 function getAuthorization() {
 	var url = "https://accounts.spotify.com/authorize";
 	var newURL = url.concat("?client_id=", clientID,
-		"&redirect_uri=http://localhost:8000","&response_type=token");
+		"&redirect_uri=http://localhost:8000",
+		"&scope=playlist-modify-public%20playlist-modify-private",
+		"&response_type=token");
 
 	//redirect to login for spotify
 	window.location.replace(newURL);
@@ -138,10 +140,6 @@ function getAccessToken() {
 	var token;
 
 	//if access grant, save access token
-	/* http://localhost:8000/
-	#access_token=BQCHeBl0bc3knSu7ykvXQ_uNnwhBoASejXEPCjl2JxqOn9u7ntCHt2O7zBmidGg
-	UTeWnEadH0dfRhrYF71u_cEBbcj9vx8UX2ljUz1KU3W-ZlB0Pyc_Cj9pn2Q1BmzOPhM-SckwkzCIdA
-	EOOiv-lc3JqcR3WPozzQZU&token_type=Bearer&expires_in=3600*/
 	if (currURL.includes("access_token",22) == true) {
 		token = window.location.hash.replace(/(#access_token=)/, "");
 		accessToken = token.replace(/(&token_type=Bearer&expires_in=3600)/, "");
@@ -151,19 +149,7 @@ function getAccessToken() {
 	}*/
 }
 
-//check weather
-
 //build GET recommendation url
-/*https://api.spotify.com/v1/recommendations
-?seed_genres=pop%2blues
-&min_energy=0.4
-&min_valence=0.5
-&min_dancibility=US
-" -H "Authorization: Bearer {your access token}
-
-Object.keys(dictionary).forEach(function(key) {
-    console.log(key, dictionary[key]);
-});*/
 function builderHelper(weatherGroup) {
 	console.log(weatherGroup);
 	var url = "https://api.spotify.com/v1/recommendations"
@@ -205,13 +191,95 @@ function getRecommendations(url) {
 	})
 		.then(response => response.json())
 		.then(data => {
+			var trackURIs = []
+
 		//populate array with URIs from tracks
 	});
 }
 
+//get current user ID
+function getUserID(){
+	var userID;
+	var access = "Bearer "+accessToken;
+	fetch("https://api.spotify.com/v1/me", {
+		headers: {
+			Accept: "application/json",
+			Authorization: access,
+			"Content-Type": "application/json"
+		}
+	})
+		.then(response => response.json())
+		.then(data => {
+			userID = data.id;
+			console.log("userid", userID);
+			return userID;
+	});
+	
+}
+
+/*function test(){
+	const request = async () => {
+	    const response = await 
+	    fetch("https://api.spotify.com/v1/me", {
+			headers: {
+				Accept: "application/json",
+				Authorization: "Bearer BQBv9lnu3Mf9JqZMTd1Ym5eOCipNLZS0O_mDzix7hoLB8ic3slF1vs9Cd587xMLPyXExKkljyv6TGWrVnkpCyufj3cfB9PRcxyZWHSd3OrIfrD-jrWMSqwgSQLuIY6pU6AYIQUFesYLudGbS2lxEh6wWny-tW-3i19rRHNioYhZniHv7Cv03TeE77eewr3y9k6ChyANBZfNMdFgeu1R7sVUWwpmf",
+				"Content-Type": "application/json"
+			}
+		});
+	    const json = await response.json();
+	    console.log(json);
+	}
+
+	request();
+}*/
+
+//create a new playlist
+function createNewPlaylist(){
+	var userID = getUserID();
+	console.log("userid in create funct", userID);
+	var access = "Bearer "+accessToken;
+	var url = "https://api.spotify.com/v1/users/"+userID+"/playlists";
+	fetch(url, {
+		body: "{\"name\\\":\\\"New Playlist\\\",\\\"description\\\":\\\"New playlist description\\\",\\\"public\\\":true}",
+		headers: {
+			Accept: "application/json",
+			Authorization: access,
+			"Content-Type": "application/json"
+		},
+		method: "POST"
+	})
+		.then(response => response.json())
+		.then(data => {
+			console.log(data);
+			var playlistID = data["id"];
+			console.log(id, playlistID);
+	});
+}
+
+//add tracks to playlist playlistURI = 62BgcjjA68WDuafi7AtQ9y
+function addTracksToPlaylist() {
+	var playlistURI = "62BgcjjA68WDuafi7AtQ9y";
+	var URIs = "spotify%3Atrack%3A57vxBYXtHMk6H1aD29V7PU%2Cspotify%3Atrack%3A57vxBYXtHMk6H1aD29V7PU";
+	var url = "https://api.spotify.com/v1/playlists/"+playlistURI+"/tracks?uris="+URIs;
+	var access = "Bearer "+accessToken;
+	fetch(url, {
+		//credentials: 'include',
+		headers: {
+			Accept: "application/json",
+			Authorization: access,
+			"Content-Type": "application/json"
+		},
+		method: "POST"
+	})
+	console.log(url)
+}
 //fetch recommendations from Spotify
 
 //arrange returned tracks from Spotify recommendation
+/*https://api.spotify.com/v1/playlists/62BgcjjA68WDuafi7AtQ9y/
+tracks?position=1
+&uris=spotify%3Atrack%3A57vxBYXtHMk6H1aD29V7PU%2Cspotify%3Atrack%3A57vxBYXtHMk6H1aD29V7PU*/
 
 
 
