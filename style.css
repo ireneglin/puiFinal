@@ -4,7 +4,9 @@
 		font-size: 50px;
 }
 /* accuweather icons */
+/*sunny*/
 .icon-accu01:before {content: "\f00d";}
+/*cloudy*/
 .icon-accu02:before {content: "\f002";}
 .icon-accu03:before {content: "\f002";}
 .icon-accu04:before {content: "\f07d";}
@@ -15,6 +17,7 @@
 /*.icon-accu09:before {content: "\f0d7";}*/
 /*.icon-accu10:before {content: "\f0d8";}*/
 .icon-accu11:before {content: "\f014";}
+/*rainy*/
 .icon-accu12:before {content: "\f01a";}
 .icon-accu13:before {content: "\f009";}
 .icon-accu14:before {content: "\f009";}
@@ -22,6 +25,7 @@
 .icon-accu16:before {content: "\f010";}
 .icon-accu17:before {content: "\f010";}
 .icon-accu18:before {content: "\f019";}
+/*snowy*/
 .icon-accu19:before {content: "\f01b";}
 .icon-accu20:before {content: "\f00a";}
 .icon-accu21:before {content: "\f00a";}
@@ -33,9 +37,11 @@
 /*.icon-accu27:before {content: "\f0e9";}*/
 /*.icon-accu28:before {content: "\f0ea";}*/
 .icon-accu29:before {content: "\f017";}
-.icon-accu30:before {content: "\f055";}
-.icon-accu31:before {content: "\f053";}
-.icon-accu32:before {content: "\f012";}
+.icon-accu30:before {content: "\f055";}/*temperature*/
+.icon-accu31:before {content: "\f053";}/*temperature*/
+.icon-accu32:before {content: "\f012";}/*windy??*/
+
+
 /* night */
 .icon-accu33:before {content: "\f02e";}
 .icon-accu34:before {content: "\f086";}

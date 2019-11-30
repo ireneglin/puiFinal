@@ -16,10 +16,59 @@ JS functionalities to do
 var apiKey = "YP9GsGpyqk2uJxUJyHXFAyx7HBZqpA2H";
 var locationURL = "http://dataservice.accuweather.com/locations/v1/cities/us/search";
 var forecastURL = "http://dataservice.accuweather.com/forecasts/v1/hourly/1hour/";
+var weatherForecast;
+
 
 var clientID =  "5e4865c2de614bb4a5b2f590fab22a04";
 var clientSID = "b3d12f5e28c346cf90498bc088870505";
 var accessToken;
+
+//organize weather-mood pair into dictionary
+var sunny = {
+	seed_genre: "summer%2Cpop%2Chappy%2Cindie-pop%2Cdance",
+	min_valence: 0.8,
+	min_dancibility: 0.5,
+	min_energy: 0.8
+}
+
+var cloudy = {
+	seed_genre: "folk%2Cfunk%2Cguitar%2Cindie%2Crainy-day",
+	min_valence: 0.6,
+	max_valence: 0.8,
+	min_dancibility: 0.2,
+	max_dancibility: 0.5,
+	min_energy: 0.6,
+	max_energy: 0.8
+}
+
+var rainy = {
+	seed_genre: "study%2Csongwriter%2Cchill%2Cjazz%2Cambient",
+	min_valence: 0.4,
+	max_valence: 0.6,
+	min_dancibility: 0.2,
+	max_dancibility: 0.5,
+	min_energy: 0.4,
+	max_energy: 0.6
+}
+
+var snowy = {
+	seed_genre: "sleep%2Cambient%2Crainy-day%2Csoundtracks%2Cholidays",
+	min_valence: 0.2,
+	max_valence: 0.4,
+	min_dancibility: 0.0,
+	max_dancibility: 0.3,
+	min_energy: 0.2,
+	max_energy: 0.4
+}
+
+var night = {
+	seed_genre: "sleep%2Cambient%2Cchill%2Cacoustic%2Csad%2Csoundtracks",
+	max_valence: 0.2,
+	max_dancibility: 0.2,
+	max_energy: 0.2
+}
+
+
 
 //pull user input from location textbox
 function locationInputGetter() {
@@ -37,7 +86,6 @@ function getLocationKey() {
 	fetch(url) 
 		.then(response => response.json())
 		.then(data => {
-			console.log(data);
 			getHourWeather(data[0].Key);
 		});
 }
@@ -54,8 +102,9 @@ function hourWeatherDisplayHelper(iconNum) {
 		document.getElementById("weatherIcon").classList.add("icon-accu"+iconNum);
 	} else {
 		document.getElementById("weatherIcon").classList.add("icon-accu0"+iconNum);
-		console.log("iconNum: "+iconNum);
 	}
+
+	buildRecommendationURL(1);
 }
 
 //get weather for next hour, needs location key
@@ -66,7 +115,8 @@ function getHourWeather(locationKey) {
 	fetch(newForecastURL)
 		.then(response => response.json())
 		.then(data => {
-		console.log(data);
+		//assign weather forecast to global variable
+		weatherForecast = data[0].WeatherIcon;
 		hourWeatherDisplayHelper(data[0].WeatherIcon);
 	});
 }
@@ -77,7 +127,6 @@ function getAuthorization() {
 	var url = "https://accounts.spotify.com/authorize";
 	var newURL = url.concat("?client_id=", clientID,
 		"&redirect_uri=http://localhost:8000","&response_type=token");
-	console.log(newURL);
 
 	//redirect to login for spotify
 	window.location.replace(newURL);
@@ -88,20 +137,81 @@ function getAccessToken() {
 	var currURL = window.location.href;
 	var token;
 
-	//if access grant, saves access token
+	//if access grant, save access token
 	/* http://localhost:8000/
 	#access_token=BQCHeBl0bc3knSu7ykvXQ_uNnwhBoASejXEPCjl2JxqOn9u7ntCHt2O7zBmidGg
 	UTeWnEadH0dfRhrYF71u_cEBbcj9vx8UX2ljUz1KU3W-ZlB0Pyc_Cj9pn2Q1BmzOPhM-SckwkzCIdA
 	EOOiv-lc3JqcR3WPozzQZU&token_type=Bearer&expires_in=3600*/
 	if (currURL.includes("access_token",22) == true) {
 		token = window.location.hash.replace(/(#access_token=)/, "");
-		accessToken = token.replace(/(&token_type=Bearer&expires_in=3600)/, "")
+		accessToken = token.replace(/(&token_type=Bearer&expires_in=3600)/, "");
 		console.log(accessToken);
-	}
+	} /*else {
+		alert("Please log in with your Spotify account for full access to features!");
+	}*/
 }
 
+//check weather
 
+//build GET recommendation url
+/*https://api.spotify.com/v1/recommendations
+?seed_genres=pop%2blues
+&min_energy=0.4
+&min_valence=0.5
+&min_dancibility=US
+" -H "Authorization: Bearer {your access token}
 
+Object.keys(dictionary).forEach(function(key) {
+    console.log(key, dictionary[key]);
+});*/
+function builderHelper(weatherGroup) {
+	console.log(weatherGroup);
+	var url = "https://api.spotify.com/v1/recommendations"
+	url = url.concat("?", Object.keys(weatherGroup)[0], Object.values(weatherGroup)[0]);
+	for (var i=1; i<Object.keys(weatherGroup).length; i++) {
+		url = url.concat("&", Object.keys(weatherGroup)[i], "=", Object.values(weatherGroup)[i].toString());
+	}
+	return url;
+}
+
+function buildRecommendationURL(weather) {
+	var builtURL;
+
+	if (weather == 1) {
+		builtURL = builderHelper(sunny);
+	} 
+	else if (1 < weather <= 8) {
+		builtURL = builderHelper(cloudy);
+	} 
+	else if (8 < weather <= 16) {
+		builtURL = builderHelper(rainy);
+	} 
+	else if (16 < weather <= 24) {
+		builtURL = builderHelper(snowy);
+	} 
+	else {
+		builtURL = builderHelper(night);
+	}
+	return builtURL;
+}
+
+function getRecommendations(url) {
+	fetch(url, {
+		headers: {
+			Accept: "application/json",
+			Authorization: "Bearer "+accessToken,
+			"Content-Type": "application/json"
+		}
+	})
+		.then(response => response.json())
+		.then(data => {
+		//populate array with URIs from tracks
+	});
+}
+
+//fetch recommendations from Spotify
+
+//arrange returned tracks from Spotify recommendation
 
 
 
