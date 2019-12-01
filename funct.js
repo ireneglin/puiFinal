@@ -22,6 +22,7 @@ var weatherForecast;
 var clientID =  "5e4865c2de614bb4a5b2f590fab22a04";
 var clientSID = "b3d12f5e28c346cf90498bc088870505";
 var accessToken;
+var userID;
 
 //organize weather-mood pair into dictionary
 var sunny = {
@@ -134,6 +135,11 @@ function getAuthorization() {
 	window.location.replace(newURL);
 }
 
+function collectUserInfo(){
+	getAccessToken();
+	getUserID();
+}
+
 //get access token from spotify user using implicit grant flow
 function getAccessToken() {
 	var currURL = window.location.href;
@@ -147,6 +153,7 @@ function getAccessToken() {
 	} /*else {
 		alert("Please log in with your Spotify account for full access to features!");
 	}*/
+	getUserID();
 }
 
 //build GET recommendation url
@@ -199,49 +206,31 @@ function getRecommendations(url) {
 
 //get current user ID
 function getUserID(){
-	var userID;
 	var access = "Bearer "+accessToken;
-	fetch("https://api.spotify.com/v1/me", {
+	const request = async () => {
+	    const response = await fetch("https://api.spotify.com/v1/me", {
 		headers: {
 			Accept: "application/json",
 			Authorization: access,
 			"Content-Type": "application/json"
 		}
 	})
-		.then(response => response.json())
-		.then(data => {
-			userID = data.id;
-			console.log("userid", userID);
-			return userID;
-	});
-	
+		const json = await response.json();
+		console.log("json", json);
+		userID = json.id;
+		console.log("userid", userID);
+	}
+	request();
 }
 
-/*function test(){
-	const request = async () => {
-	    const response = await 
-	    fetch("https://api.spotify.com/v1/me", {
-			headers: {
-				Accept: "application/json",
-				Authorization: "Bearer BQBv9lnu3Mf9JqZMTd1Ym5eOCipNLZS0O_mDzix7hoLB8ic3slF1vs9Cd587xMLPyXExKkljyv6TGWrVnkpCyufj3cfB9PRcxyZWHSd3OrIfrD-jrWMSqwgSQLuIY6pU6AYIQUFesYLudGbS2lxEh6wWny-tW-3i19rRHNioYhZniHv7Cv03TeE77eewr3y9k6ChyANBZfNMdFgeu1R7sVUWwpmf",
-				"Content-Type": "application/json"
-			}
-		});
-	    const json = await response.json();
-	    console.log(json);
-	}
-
-	request();
-}*/
-
 //create a new playlist
+var playlistID;
 function createNewPlaylist(){
-	var userID = getUserID();
 	console.log("userid in create funct", userID);
 	var access = "Bearer "+accessToken;
 	var url = "https://api.spotify.com/v1/users/"+userID+"/playlists";
 	fetch(url, {
-		body: "{\"name\\\":\\\"New Playlist\\\",\\\"description\\\":\\\"New playlist description\\\",\\\"public\\\":true}",
+		body: "{\"name\":\"New Playlist\",\"description\":\"New playlist description\",\"public\":true}",
 		headers: {
 			Accept: "application/json",
 			Authorization: access,
@@ -252,8 +241,7 @@ function createNewPlaylist(){
 		.then(response => response.json())
 		.then(data => {
 			console.log(data);
-			var playlistID = data["id"];
-			console.log(id, playlistID);
+			playlistID = data.id;
 	});
 }
 
@@ -264,14 +252,14 @@ function addTracksToPlaylist() {
 	var url = "https://api.spotify.com/v1/playlists/"+playlistURI+"/tracks?uris="+URIs;
 	var access = "Bearer "+accessToken;
 	fetch(url, {
-		//credentials: 'include',
-		headers: {
-			Accept: "application/json",
-			Authorization: access,
-			"Content-Type": "application/json"
-		},
-		method: "POST"
-	})
+			//credentials: 'include',
+			headers: {
+				Accept: "application/json",
+				Authorization: access,
+				"Content-Type": "application/json"
+			},
+			method: "POST"
+		})
 	console.log(url)
 }
 //fetch recommendations from Spotify
