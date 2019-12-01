@@ -16,14 +16,14 @@ var userID;
 
 //organize weather-mood pair into dictionary
 var sunny = {
-	seed_genre: "summer%2Cpop%2Chappy%2Cindie-pop%2Cdance",
+	seed_genres: "summer%2Cpop%2Chappy%2Cindie-pop%2Cdance",
 	min_valence: 0.8,
 	min_dancibility: 0.5,
 	min_energy: 0.8
 }
 
 var cloudy = {
-	seed_genre: "folk%2Cfunk%2Cguitar%2Cindie%2Crainy-day",
+	seed_genres: "folk%2Cfunk%2Cguitar%2Cindie%2Crainy-day",
 	min_valence: 0.4,
 	max_valence: 0.7,
 	min_dancibility: 0.2,
@@ -33,7 +33,7 @@ var cloudy = {
 }
 
 var rainy = {
-	seed_genre: "study%2Csongwriter%2Cchill%2Cjazz%2Cambient",
+	seed_genres: "study%2Csongwriter%2Cchill%2Cjazz%2Cambient",
 	min_valence: 0.3,
 	max_valence: 0.6,
 	min_dancibility: 0.2,
@@ -43,7 +43,7 @@ var rainy = {
 }
 
 var snowy = {
-	seed_genre: "sleep%2Cambient%2Crainy-day%2Csoundtracks%2Cholidays",
+	seed_genres: "sleep%2Cambient%2Crainy-day%2Csoundtracks%2Cholidays",
 	min_valence: 0.4,
 	max_valence: 0.6,
 	min_dancibility: 0.0,
@@ -53,7 +53,7 @@ var snowy = {
 }
 
 var night = {
-	seed_genre: "sleep%2Cambient%2Cchill%2Cacoustic%2Csad%2Csoundtracks",
+	seed_genres: "sleep%2Cambient%2Cchill%2Cacoustic%2Csad%2Csoundtracks",
 	max_valence: 0.3,
 	max_dancibility: 0.2,
 	max_energy: 0.3
@@ -65,6 +65,9 @@ var night = {
 function locationInputGetter() {
 	var city = document.getElementById("cityLocationInput").value;
 	var newLocationURL = locationURL.concat("?apikey=", apiKey, "&q=", city);
+	if (city == "") {
+		alert("please input valid US city");
+	}
 	return newLocationURL;
 }
 
@@ -109,6 +112,7 @@ function getHourWeather(locationKey) {
 	});
 }
 
+/*--Spotify API authorization---------------------------------------------------------*/
 
 //redirect user to spotify login
 function getAuthorization() {
@@ -154,13 +158,16 @@ function getUserID(){
 	request();
 }
 
+/*--Spotify API recommendations, building playlist--------------------------------*/
+
 //create a new playlist
 var playlistID;
-function createNewPlaylist(){
+function createNewPlaylist(callback){
 	var access = "Bearer "+accessToken;
 	var url = "https://api.spotify.com/v1/users/"+userID+"/playlists";
-	fetch(url, {
-		body: "{\"name\":\"New Playlist\",\"description\":\"New playlist description\",\"public\":true}",
+	const request = async () => {
+	    const response = await 	fetch(url, {
+		body: "{\"name\":\""+currWeather+"\",\"description\":\"made by accuspot\",\"public\":true}",
 		headers: {
 			Accept: "application/json",
 			Authorization: access,
@@ -168,73 +175,24 @@ function createNewPlaylist(){
 		},
 		method: "POST"
 	})
-		.then(response => response.json())
-		.then(data => {
-			playlistID = data.id;
-	});
+		const json = await response.json();
+		playlistID = data.id;
+	};
+	request();
+	callback();
 }
 
-//build GET recommendation url
-function builderHelper(weatherGroup) {
-	//console.log(weatherGroup);
-	var url = "https://api.spotify.com/v1/recommendations"
-	url = url.concat("?", Object.keys(weatherGroup)[0], Object.values(weatherGroup)[0]);
-	for (var i=1; i<Object.keys(weatherGroup).length; i++) {
-		url = url.concat("&", Object.keys(weatherGroup)[i], "=", Object.values(weatherGroup)[i].toString());
-	}
+//make rec URL
+function buildTracksToPlaylistURL() {
+	var url = "https://api.spotify.com/v1/playlists/"+playlistID+"/tracks?uris="+trackURIs.join("%2C");
+	console.log("ttop url", url);
 	return url;
-}
-
-//fetch recommendations from Spotify
-function buildRecommendationURL(weather) {
-	var builtURL;
-
-	if (weather == 1) {
-		builtURL = builderHelper(sunny);
-	} 
-	else if (1 < weather <= 11) {
-		builtURL = builderHelper(cloudy);
-	} 
-	else if (11 < weather <= 18) {
-		builtURL = builderHelper(rainy);
-	} 
-	else if (18 < weather <= 32) {
-		builtURL = builderHelper(snowy);
-	} 
-	else {
-		builtURL = builderHelper(night);
-	}
-	return builtURL;
-}
-
-//fetch recommendations from Spotify
-function getRecommendations() {
-	var url = buildRecommendationURL(weatherForecast);
-	fetch(url, {
-		headers: {
-			Accept: "application/json",
-			Authorization: "Bearer "+accessToken,
-			"Content-Type": "application/json"
-		}
-	})
-		.then(response => response.json())
-		.then(data => {
-			//populate array with URIs from tracks
-			var trackURIs = [];
-			for (var i = 1; i <= 10; i++) {
-				trackURIs.push(data[0].uri);
-			}
-			console.log("uri len",trackURIs);
-			console.log("uri",trackURIs);
-	});
 }
 
 //add tracks to playlist playlistURI = 62BgcjjA68WDuafi7AtQ9y
 function addTracksToPlaylist() {
-	var playlistURI = "62BgcjjA68WDuafi7AtQ9y";
-	var URIs = "spotify%3Atrack%3A57vxBYXtHMk6H1aD29V7PU%2Cspotify%3Atrack%3A57vxBYXtHMk6H1aD29V7PU";
-	var url = "https://api.spotify.com/v1/playlists/"+playlistURI+"/tracks?uris="+URIs;
-	var access = "Bearer "+accessToken;
+	var url = buildTracksToPlaylistURL();
+	var access = "Bearer " + accessToken;
 	fetch(url, {
 			//credentials: 'include',
 			headers: {
@@ -247,5 +205,78 @@ function addTracksToPlaylist() {
 	console.log(url)
 }
 
+//build GET recommendation url
+function builderHelper(weatherGroup) {
+	//console.log(weatherGroup);
+	var url = "https://api.spotify.com/v1/recommendations"
+	url = url.concat("?", Object.keys(weatherGroup)[0], "=", Object.values(weatherGroup)[0]);
+	for (var i=1; i<Object.keys(weatherGroup).length; i++) {
+		url = url.concat("&", Object.keys(weatherGroup)[i], "=", Object.values(weatherGroup)[i].toString());
+	}
+	var urlName = [url, "weatherGroup"];
+	return urlName;
+}
+
+//fetch recommendations from Spotify
+var currWeather;
+function buildRecommendationURL(weather) {
+	var builtURL;
+
+	if (weather == 1) {
+		builtURL = builderHelper(sunny);
+		currWeather = "sunny";
+	} 
+	else if (1 < weather <= 11) {
+		builtURL = builderHelper(cloudy);
+		currWeather = "cloudy";
+	} 
+	else if (11 < weather <= 18) {
+		builtURL = builderHelper(rainy);
+		currWeather = "rainy";
+	} 
+	else if (18 < weather <= 32) {
+		builtURL = builderHelper(snowy);
+		currWeather = "snowy";
+	} 
+	else {
+		builtURL = builderHelper(night);
+		currWeather = "night";
+	}
+	return builtURL;
+}
+
+//fetch recommendations from spotify
+var trackURIs
+function getRecommendations(callback) {
+	var urlName = buildRecommendationURL(weatherForecast);
+	var url = urlName[0];
+	var playlistName = urlName[1];
+	const request = async () => {
+	    const response = await fetch(url, {
+		headers: {
+			Accept: "application/json",
+			Authorization: "Bearer "+accessToken,
+			"Content-Type": "application/json"
+		}
+	})
+		const json = await response.json();
+		console.log("json", json);
+		//populate array with URIs from tracks
+		trackURIs = [];
+		var tracks = json.tracks;
+		for (var i = 0; i <= tracks.length-1; i++) {
+			trackURIs.push(tracks[i].uri);
+		}
+		console.log(trackURIs)
+	};
+	request();
+	callback();
+}
+
 //arrange returned tracks from Spotify recommendation
 
+//songs start
+function songsStart() {
+	createNewPlaylist(getRecommendations);
+	getRecommendations(addTracksToPlaylist);
+}
