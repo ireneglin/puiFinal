@@ -1,17 +1,7 @@
 /* 
 JS functionalities to do
 
-1. get location by api, onload
-2. display weather
-3. define 
 */
-
-//set up function for getting input
-//get input
-//update url
-//GET with url
-//parse info from GET
-//display parsed GET info
 
 var apiKey = "YP9GsGpyqk2uJxUJyHXFAyx7HBZqpA2H";
 var locationURL = "http://dataservice.accuweather.com/locations/v1/cities/us/search";
@@ -34,28 +24,28 @@ var sunny = {
 
 var cloudy = {
 	seed_genre: "folk%2Cfunk%2Cguitar%2Cindie%2Crainy-day",
-	min_valence: 0.6,
-	max_valence: 0.8,
+	min_valence: 0.4,
+	max_valence: 0.7,
 	min_dancibility: 0.2,
 	max_dancibility: 0.5,
-	min_energy: 0.6,
-	max_energy: 0.8
+	min_energy: 0.4,
+	max_energy: 0.7
 }
 
 var rainy = {
 	seed_genre: "study%2Csongwriter%2Cchill%2Cjazz%2Cambient",
-	min_valence: 0.4,
+	min_valence: 0.3,
 	max_valence: 0.6,
 	min_dancibility: 0.2,
 	max_dancibility: 0.5,
-	min_energy: 0.4,
+	min_energy: 0.3,
 	max_energy: 0.6
 }
 
 var snowy = {
 	seed_genre: "sleep%2Cambient%2Crainy-day%2Csoundtracks%2Cholidays",
-	min_valence: 0.2,
-	max_valence: 0.4,
+	min_valence: 0.4,
+	max_valence: 0.6,
 	min_dancibility: 0.0,
 	max_dancibility: 0.3,
 	min_energy: 0.2,
@@ -64,9 +54,9 @@ var snowy = {
 
 var night = {
 	seed_genre: "sleep%2Cambient%2Cchill%2Cacoustic%2Csad%2Csoundtracks",
-	max_valence: 0.2,
+	max_valence: 0.3,
 	max_dancibility: 0.2,
-	max_energy: 0.2
+	max_energy: 0.3
 }
 
 
@@ -96,8 +86,6 @@ function hourWeatherDisplayHelper(iconNum) {
 	document.getElementById("weatherIcon").className = '';
 
 	//add new classes
-	console.log("iconNum: "+iconNum);
-	console.log("type of iconNum: "+typeof iconNum);
 	document.getElementById("weatherIcon").classList.add("wi");
 	if (iconNum >= 10) {
 		document.getElementById("weatherIcon").classList.add("icon-accu"+iconNum);
@@ -112,7 +100,6 @@ function hourWeatherDisplayHelper(iconNum) {
 function getHourWeather(locationKey) {
 	//GET 1 Hour of Hourly Forecasts
 	var newForecastURL = forecastURL.concat(locationKey,"?apikey=", apiKey);
-	console.log("url:"+newForecastURL);
 	fetch(newForecastURL)
 		.then(response => response.json())
 		.then(data => {
@@ -135,11 +122,6 @@ function getAuthorization() {
 	window.location.replace(newURL);
 }
 
-function collectUserInfo(){
-	getAccessToken();
-	getUserID();
-}
-
 //get access token from spotify user using implicit grant flow
 function getAccessToken() {
 	var currURL = window.location.href;
@@ -149,59 +131,10 @@ function getAccessToken() {
 	if (currURL.includes("access_token",22) == true) {
 		token = window.location.hash.replace(/(#access_token=)/, "");
 		accessToken = token.replace(/(&token_type=Bearer&expires_in=3600)/, "");
-		console.log(accessToken);
 	} /*else {
 		alert("Please log in with your Spotify account for full access to features!");
 	}*/
 	getUserID();
-}
-
-//build GET recommendation url
-function builderHelper(weatherGroup) {
-	console.log(weatherGroup);
-	var url = "https://api.spotify.com/v1/recommendations"
-	url = url.concat("?", Object.keys(weatherGroup)[0], Object.values(weatherGroup)[0]);
-	for (var i=1; i<Object.keys(weatherGroup).length; i++) {
-		url = url.concat("&", Object.keys(weatherGroup)[i], "=", Object.values(weatherGroup)[i].toString());
-	}
-	return url;
-}
-
-function buildRecommendationURL(weather) {
-	var builtURL;
-
-	if (weather == 1) {
-		builtURL = builderHelper(sunny);
-	} 
-	else if (1 < weather <= 8) {
-		builtURL = builderHelper(cloudy);
-	} 
-	else if (8 < weather <= 16) {
-		builtURL = builderHelper(rainy);
-	} 
-	else if (16 < weather <= 24) {
-		builtURL = builderHelper(snowy);
-	} 
-	else {
-		builtURL = builderHelper(night);
-	}
-	return builtURL;
-}
-
-function getRecommendations(url) {
-	fetch(url, {
-		headers: {
-			Accept: "application/json",
-			Authorization: "Bearer "+accessToken,
-			"Content-Type": "application/json"
-		}
-	})
-		.then(response => response.json())
-		.then(data => {
-			var trackURIs = []
-
-		//populate array with URIs from tracks
-	});
 }
 
 //get current user ID
@@ -216,9 +149,7 @@ function getUserID(){
 		}
 	})
 		const json = await response.json();
-		console.log("json", json);
 		userID = json.id;
-		console.log("userid", userID);
 	}
 	request();
 }
@@ -226,7 +157,6 @@ function getUserID(){
 //create a new playlist
 var playlistID;
 function createNewPlaylist(){
-	console.log("userid in create funct", userID);
 	var access = "Bearer "+accessToken;
 	var url = "https://api.spotify.com/v1/users/"+userID+"/playlists";
 	fetch(url, {
@@ -240,8 +170,62 @@ function createNewPlaylist(){
 	})
 		.then(response => response.json())
 		.then(data => {
-			console.log(data);
 			playlistID = data.id;
+	});
+}
+
+//build GET recommendation url
+function builderHelper(weatherGroup) {
+	//console.log(weatherGroup);
+	var url = "https://api.spotify.com/v1/recommendations"
+	url = url.concat("?", Object.keys(weatherGroup)[0], Object.values(weatherGroup)[0]);
+	for (var i=1; i<Object.keys(weatherGroup).length; i++) {
+		url = url.concat("&", Object.keys(weatherGroup)[i], "=", Object.values(weatherGroup)[i].toString());
+	}
+	return url;
+}
+
+//fetch recommendations from Spotify
+function buildRecommendationURL(weather) {
+	var builtURL;
+
+	if (weather == 1) {
+		builtURL = builderHelper(sunny);
+	} 
+	else if (1 < weather <= 11) {
+		builtURL = builderHelper(cloudy);
+	} 
+	else if (11 < weather <= 18) {
+		builtURL = builderHelper(rainy);
+	} 
+	else if (18 < weather <= 32) {
+		builtURL = builderHelper(snowy);
+	} 
+	else {
+		builtURL = builderHelper(night);
+	}
+	return builtURL;
+}
+
+//fetch recommendations from Spotify
+function getRecommendations() {
+	var url = buildRecommendationURL(weatherForecast);
+	fetch(url, {
+		headers: {
+			Accept: "application/json",
+			Authorization: "Bearer "+accessToken,
+			"Content-Type": "application/json"
+		}
+	})
+		.then(response => response.json())
+		.then(data => {
+			//populate array with URIs from tracks
+			var trackURIs = [];
+			for (var i = 1; i <= 10; i++) {
+				trackURIs.push(data[0].uri);
+			}
+			console.log("uri len",trackURIs);
+			console.log("uri",trackURIs);
 	});
 }
 
@@ -262,13 +246,6 @@ function addTracksToPlaylist() {
 		})
 	console.log(url)
 }
-//fetch recommendations from Spotify
 
 //arrange returned tracks from Spotify recommendation
-/*https://api.spotify.com/v1/playlists/62BgcjjA68WDuafi7AtQ9y/
-tracks?position=1
-&uris=spotify%3Atrack%3A57vxBYXtHMk6H1aD29V7PU%2Cspotify%3Atrack%3A57vxBYXtHMk6H1aD29V7PU*/
-
-
-
 
