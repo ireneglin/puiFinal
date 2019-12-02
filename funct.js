@@ -167,7 +167,7 @@ function createNewPlaylist(){//callback){
 	var url = "https://api.spotify.com/v1/users/"+userID+"/playlists";
 	const request = async () => {
 	    const response = await 	fetch(url, {
-		body: "{\"name\":\""+"New Playlist"+"\",\"description\":\"made by accuspot\",\"public\":true}",//body: "{\"name\":\""+currWeather+"\",\"description\":\"made by accuspot\",\"public\":true}",
+		body: "{\"name\":\""+currWeather+"\",\"description\":\"made by accuspot\",\"public\":true}",//body: "{\"name\":\""+currWeather+"\",\"description\":\"made by accuspot\",\"public\":true}",
 		headers: {
 			Accept: "application/json",
 			Authorization: access,
@@ -190,7 +190,7 @@ function buildTracksToPlaylistURL() {
 }
 
 //add tracks to playlist playlistURI = 62BgcjjA68WDuafi7AtQ9y
-function addTracksToPlaylist() {
+async function addTracksToPlaylist() {
 	var url = buildTracksToPlaylistURL();
 	var access = "Bearer " + accessToken;
 	fetch(url, {
@@ -203,6 +203,8 @@ function addTracksToPlaylist() {
 			method: "POST"
 		})
 	console.log(url)
+
+	await getRecommendations();
 }
 
 //build GET recommendation url
@@ -250,7 +252,6 @@ var trackURIs
 function getRecommendations(){//callback) {
 	var urlName = buildRecommendationURL(weatherForecast);
 	var url = urlName[0];
-	var playlistName = urlName[1];
 	const request = async () => {
 	    const response = await fetch(url, {
 		headers: {
@@ -273,10 +274,37 @@ function getRecommendations(){//callback) {
 	//callback();
 }
 
+/*var trackURIs
+function getRecommendations(){//callback) {
+	var urlName = buildRecommendationURL(weatherForecast);
+	var url = urlName[0];
+	var playlistName = urlName[1];
+	const request = async () => {
+	    const response = await fetch(url, {
+		headers: {
+			Accept: "application/json",
+			Authorization: "Bearer "+accessToken,
+			"Content-Type": "application/json"
+		}
+	})
+		const json = await response.json();
+		console.log("json", json);
+		//populate array with URIs from tracks
+		trackURIs = [];
+		var tracks = json.tracks;
+		for (var i = 0; i <= tracks.length-1; i++) {
+			trackURIs.push(tracks[i].uri);
+		}
+		console.log(trackURIs)
+	};
+	request();
+	//callback();
+}*/
+
 //arrange returned tracks from Spotify recommendation
 
 //songs start
-/*function songsStart() {
-	createNewPlaylist(getRecommendations);
-	getRecommendations(addTracksToPlaylist);
-}*/
+function songsStart() {
+	createNewPlaylist();
+	getRecommendations();
+}
