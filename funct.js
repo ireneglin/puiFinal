@@ -162,7 +162,7 @@ function getUserID(){
 
 //create a new playlist
 var playlistID;
-function createNewPlaylist(callback){
+function createNewPlaylist(){//callback){
 	var access = "Bearer "+accessToken;
 	var url = "https://api.spotify.com/v1/users/"+userID+"/playlists";
 	const request = async () => {
@@ -179,7 +179,7 @@ function createNewPlaylist(callback){
 		playlistID = json.id;
 	};
 	request();
-	callback();
+	//callback();
 }
 
 //make rec URL spotify:playlist:3vQAo3evqhXylSJUQZV85j
@@ -247,7 +247,7 @@ function buildRecommendationURL(weather) {
 
 //fetch recommendations from spotify
 var trackURIs
-function getRecommendations(callback) {
+function getRecommendations(){//callback) {
 	var urlName = buildRecommendationURL(weatherForecast);
 	var url = urlName[0];
 	var playlistName = urlName[1];
@@ -270,13 +270,13 @@ function getRecommendations(callback) {
 		console.log(trackURIs)
 	};
 	request();
-	callback();
+	//callback();
 }
 
 //arrange returned tracks from Spotify recommendation
 
 //songs start
-function songsStart() {
+/*function songsStart() {
 	createNewPlaylist(getRecommendations);
 	getRecommendations(addTracksToPlaylist);
-}
+}*/
