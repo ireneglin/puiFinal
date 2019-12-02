@@ -159,6 +159,11 @@ function getUserID(){
 }
 
 /*--Spotify API recommendations, building playlist--------------------------------*/
+function songsStart() {
+	createNewPlaylist();
+	getRecommendations();
+}
+
 
 //create a new playlist
 var playlistID;
@@ -304,7 +309,3 @@ function getRecommendations(){//callback) {
 //arrange returned tracks from Spotify recommendation
 
 //songs start
-function songsStart() {
-	createNewPlaylist();
-	getRecommendations();
-}
