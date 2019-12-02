@@ -4,13 +4,13 @@ JS functionalities to do
 */
 
 var apiKey = "YP9GsGpyqk2uJxUJyHXFAyx7HBZqpA2H";
-var locationURL = "http://dataservice.accuweather.com/locations/v1/cities/us/search";
-var forecastURL = "http://dataservice.accuweather.com/forecasts/v1/hourly/1hour/";
+var locationURL = "https://dataservice.accuweather.com/locations/v1/cities/us/search";
+var forecastURL = "https://dataservice.accuweather.com/forecasts/v1/hourly/1hour/";
 var weatherForecast;
 
 
-var clientID =  "5e4865c2de614bb4a5b2f590fab22a04";
-var clientSID = "b3d12f5e28c346cf90498bc088870505";
+var clientID =  "e044cb1522744df7a304d4b149d8e7c2";//"5e4865c2de614bb4a5b2f590fab22a04";
+//var clientSID = "b3d12f5e28c346cf90498bc088870505";
 var accessToken;
 var userID;
 
@@ -118,7 +118,7 @@ function getHourWeather(locationKey) {
 function getAuthorization() {
 	var url = "https://accounts.spotify.com/authorize";
 	var newURL = url.concat("?client_id=", clientID,
-		"&redirect_uri=http://localhost:8000",
+		"&redirect_uri=https://ireneglin.github.io/puiFinal/",
 		"&scope=playlist-modify-public%20playlist-modify-private",
 		"&response_type=token");
 
@@ -162,12 +162,12 @@ function getUserID(){
 
 //create a new playlist
 var playlistID;
-function createNewPlaylist(callback){
+function createNewPlaylist(){//callback){
 	var access = "Bearer "+accessToken;
 	var url = "https://api.spotify.com/v1/users/"+userID+"/playlists";
 	const request = async () => {
 	    const response = await 	fetch(url, {
-		body: "{\"name\":\""+currWeather+"\",\"description\":\"made by accuspot\",\"public\":true}",
+		body: "{\"name\":\""+"New Playlist"+"\",\"description\":\"made by accuspot\",\"public\":true}",//body: "{\"name\":\""+currWeather+"\",\"description\":\"made by accuspot\",\"public\":true}",
 		headers: {
 			Accept: "application/json",
 			Authorization: access,
@@ -176,13 +176,13 @@ function createNewPlaylist(callback){
 		method: "POST"
 	})
 		const json = await response.json();
-		playlistID = data.id;
+		playlistID = json.id;
 	};
 	request();
-	callback();
+	//callback();
 }
 
-//make rec URL
+//make rec URL spotify:playlist:3vQAo3evqhXylSJUQZV85j
 function buildTracksToPlaylistURL() {
 	var url = "https://api.spotify.com/v1/playlists/"+playlistID+"/tracks?uris="+trackURIs.join("%2C");
 	console.log("ttop url", url);
@@ -247,7 +247,7 @@ function buildRecommendationURL(weather) {
 
 //fetch recommendations from spotify
 var trackURIs
-function getRecommendations(callback) {
+function getRecommendations(){//callback) {
 	var urlName = buildRecommendationURL(weatherForecast);
 	var url = urlName[0];
 	var playlistName = urlName[1];
@@ -270,13 +270,13 @@ function getRecommendations(callback) {
 		console.log(trackURIs)
 	};
 	request();
-	callback();
+	//callback();
 }
 
 //arrange returned tracks from Spotify recommendation
 
 //songs start
-function songsStart() {
+/*function songsStart() {
 	createNewPlaylist(getRecommendations);
 	getRecommendations(addTracksToPlaylist);
-}
+}*/
