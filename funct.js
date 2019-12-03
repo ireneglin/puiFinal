@@ -197,9 +197,9 @@ function buildTracksToPlaylistURL() {
 
 //add tracks to playlist playlistURI = 62BgcjjA68WDuafi7AtQ9y
 async function addTracksToPlaylist() {
-	var url = buildTracksToPlaylistURL();
+	//var url = buildTracksToPlaylistURL();
 	var access = "Bearer " + accessToken;
-	fetch(url, {
+	const request = async fetch(buildTracksToPlaylistURL(), {
 			//credentials: 'include',
 			headers: {
 				Accept: "application/json",
@@ -257,6 +257,7 @@ function buildRecommendationURL(weather) {
 		currWeather = "night";
 		console.log("curr night", currWeather);
 	}
+	console.log("cloudy url",builtURL);
 	return builtURL;
 }
 
