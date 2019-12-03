@@ -162,6 +162,7 @@ function getUserID(){
 function songsStart() {
 	createNewPlaylist();
 	getRecommendations();
+	addTracksToPlaylist();
 }
 
 
@@ -172,7 +173,7 @@ function createNewPlaylist(){//callback){
 	var url = "https://api.spotify.com/v1/users/"+userID+"/playlists";
 	const request = async () => {
 	    const response = await 	fetch(url, {
-		body: "{\"name\":\""+currWeather+"\",\"description\":\"made by accuspot\",\"public\":true}",//body: "{\"name\":\""+currWeather+"\",\"description\":\"made by accuspot\",\"public\":true}",
+		body: "{\"name\":\""+currWeather+"\",\"description\":\"made by accuspot\",\"public\":true}",
 		headers: {
 			Accept: "application/json",
 			Authorization: access,
@@ -228,26 +229,33 @@ function builderHelper(weatherGroup) {
 var currWeather;
 function buildRecommendationURL(weather) {
 	var builtURL;
+	console.log("weather", weather);
+	console.log("curr w", currWeather);
 
 	if (weather === 1) {
 		builtURL = builderHelper(sunny);
 		currWeather = "sunny";
+		console.log("curr sunny", currWeather);
 	} 
 	else if (1 < weather <= 11) {
 		builtURL = builderHelper(cloudy);
 		currWeather = "cloudy";
+		console.log("curr cloud", currWeather);
 	} 
 	else if (11 < weather <= 18) {
 		builtURL = builderHelper(rainy);
 		currWeather = "rainy";
+		console.log("curr rain", currWeather);
 	} 
 	else if (18 < weather <= 32) {
 		builtURL = builderHelper(snowy);
 		currWeather = "snowy";
+		console.log("curr snow", currWeather);
 	} 
 	else {
 		builtURL = builderHelper(night);
 		currWeather = "night";
+		console.log("curr night", currWeather);
 	}
 	return builtURL;
 }
