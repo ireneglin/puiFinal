@@ -229,7 +229,7 @@ var currWeather;
 function buildRecommendationURL(weather) {
 	var builtURL;
 
-	if (weather == 1) {
+	if (weather === 1) {
 		builtURL = builderHelper(sunny);
 		currWeather = "sunny";
 	} 
