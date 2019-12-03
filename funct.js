@@ -96,7 +96,7 @@ function hourWeatherDisplayHelper(iconNum) {
 		document.getElementById("weatherIcon").classList.add("icon-accu0"+iconNum);
 	}
 
-	buildRecommendationURL(1);
+	buildRecommendationURL(iconNum);
 }
 
 //get weather for next hour, needs location key
