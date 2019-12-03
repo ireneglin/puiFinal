@@ -195,7 +195,7 @@ function buildTracksToPlaylistURL() {
 }
 
 //add tracks to playlist playlistURI = 62BgcjjA68WDuafi7AtQ9y
-async function addTracksToPlaylist() {
+function addTracksToPlaylist() {
 	var url = buildTracksToPlaylistURL();
 	var access = "Bearer " + accessToken;
 	fetch(url, {
