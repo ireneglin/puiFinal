@@ -3,8 +3,8 @@ JS functionalities to do
 
 */
 
-var apiKey = "YP9GsGpyqk2uJxUJyHXFAyx7HBZqpA2H";
-var locationURL = "https://dataservice.accuweather.com/locations/v1/cities/us/search";
+var apiKey = "pTinvlBrbI3sdB9o52EyQTyQGhyunC6A";
+var locationURL = "https://dataservice.accuweather.com/locations/v1/cities/search";
 var forecastURL = "https://dataservice.accuweather.com/forecasts/v1/hourly/1hour/";
 var weatherForecast;
 
@@ -15,24 +15,25 @@ var accessToken;
 var userID;
 
 var trackURIs;
+var playlistID;
 
 //organize weather-mood pair into dictionary
 var sunny = {
-	seed_genres: "summer%2Cpop%2Chappy%2Cindie-pop%2Cdance",
+	seed_genres: "summer%2Cpop%2Chappy%2Cindie-pop%2Cparty",
 	min_valence: 0.8,
-	min_dancibility: 0.5,
+	min_dancibility: 0.8,
 	min_energy: 0.8,
 	min_popularity: 50
 }
 
 var cloudy = {
-	seed_genres: "folk%2Cfunk%2Cguitar%2Cindie%2Crainy-day",
+	seed_genres: "folk%2Cfunk%2Cindie-pop%2Cindie%2Crainy-day",
 	min_valence: 0.4,
-	max_valence: 0.7,
+	max_valence: 0.6,
 	min_dancibility: 0.2,
 	max_dancibility: 0.5,
 	min_energy: 0.4,
-	max_energy: 0.7,
+	max_energy: 0.6,
 	min_popularity: 50
 }
 
@@ -42,8 +43,7 @@ var rainy = {
 	max_valence: 0.6,
 	min_dancibility: 0.2,
 	max_dancibility: 0.5,
-	min_energy: 0.3,
-	max_energy: 0.6,
+	max_energy: 0.4,
 	min_popularity: 50
 }
 
@@ -51,7 +51,6 @@ var snowy = {
 	seed_genres: "sleep%2Cambient%2Crainy-day%2Csoundtracks%2Cholidays",
 	min_valence: 0.4,
 	max_valence: 0.6,
-	min_dancibility: 0.0,
 	max_dancibility: 0.3,
 	min_energy: 0.2,
 	max_energy: 0.4,
@@ -167,15 +166,17 @@ function getUserID(){
 }
 
 /*--Spotify API recommendations, building playlist--------------------------------*/
-function songsStart() {
-	var tracks = getRecommendations();
-	createNewPlaylist();
-	addTracksToPlaylist(tracks);
+//display playlist on index.html
+function displayPlaylistOnHome() {
+	//var newsrc = ("https://open.spotify.com/embed/album/" + playlistID);
+	//document.getElementById("hi").src = newsrc;
+	var iframe = "<iframe src=\"https://open.spotify.com/embed/playlist/" + playlistID
+				+ "\" width=\"640\" height=\"720\" frameborder=\"0\" allowtransparency=\"true\""
+				+ " allow=\"encrypted-media\"></iframe>";
+	document.getElementById("hihi").innerHTML = iframe;
 }
 
-
 //create a new playlist
-var playlistID;
 function createNewPlaylist(){//callback){
 	var access = "Bearer "+accessToken;
 	var url = "https://api.spotify.com/v1/users/"+userID+"/playlists";
@@ -191,29 +192,28 @@ function createNewPlaylist(){//callback){
 	})
 		const json = await response.json();
 		playlistID = json.id;
+		console.log("pl id", playlistID);
 	};
 	request();
 	//callback();
 }
 
 //make rec URL spotify:playlist:3vQAo3evqhXylSJUQZV85j
-var tpURL;
-function buildTracksToPlaylistURL(tracks) {
+function buildTracksToPlaylistURL() {
 	//setTimeout(3000);
-	console.log("buildTracksToPlaylistURL",tracks);
-	var url = "https://api.spotify.com/v1/playlists/"+playlistID+"/tracks?uris="+tracks.join("%2C");
+	console.log("buildTracksToPlaylistURL",trackURIs);
+	var url = "https://api.spotify.com/v1/playlists/"+playlistID+"/tracks?uris="+trackURIs.join("%2C");
 	console.log("ttop url", url);
 
-	tpURL = url;
-	//return url;
+	//tpURL = url;
+	return url;
 }
 
 //add tracks to playlist playlistURI = 62BgcjjA68WDuafi7AtQ9y
-//async 
-function addTracksToPlaylist(tracks) {
-	buildTracksToPlaylistURL(tracks);
+function addTracksToPlaylist() {
+	var url = buildTracksToPlaylistURL();
 	var access = "Bearer " + accessToken;
-	fetch(tpURL, {
+	fetch(url, {
 			//credentials: 'include',
 			headers: {
 				Accept: "application/json",
@@ -223,8 +223,7 @@ function addTracksToPlaylist(tracks) {
 			method: "POST"
 		})
 	//console.log(url)
-
-	//await getRecommendations();
+	displayPlaylistOnHome();
 }
 
 //build GET recommendation url
@@ -299,36 +298,5 @@ function getRecommendations(){//callback) {
 	request();
 	console.log("get rekd");
 	console.log(trackURIs);
-	return trackURIs;
 }
 
-/*var trackURIs
-function getRecommendations(){//callback) {
-	var urlName = buildRecommendationURL(weatherForecast);
-	var url = urlName[0];
-	var playlistName = urlName[1];
-	const request = async () => {
-	    const response = await fetch(url, {
-		headers: {
-			Accept: "application/json",
-			Authorization: "Bearer "+accessToken,
-			"Content-Type": "application/json"
-		}
-	})
-		const json = await response.json();
-		console.log("json", json);
-		//populate array with URIs from tracks
-		trackURIs = [];
-		var tracks = json.tracks;
-		for (var i = 0; i <= tracks.length-1; i++) {
-			trackURIs.push(tracks[i].uri);
-		}
-		console.log(trackURIs)
-	};
-	request();
-	//callback();
-}*/
-
-//arrange returned tracks from Spotify recommendation
-
-//songs start
