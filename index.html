@@ -33,17 +33,36 @@ MVP to do:
     </head>
 
     <body onload="getAccessToken()">
-        <h1>Accuweather + Spotify</h1>
+        <h1 id="siteMainTitle">Accuweather + Spotify</h1>
         
         <!--landing / on boarding screen-->
-        <div>
-            <a onclick="getAuthorization()">connect to spotify</a>
+        <div class="flex-container">
+            <div class="onboardingItem">
+                <h2>1</h2><p>Login to Spotify</p>
+            </div>
+            <div class="onboardingItem">
+                <h2>2</h2><p>Find out the weather</p>
+            </div>
+            <div class="onboardingItem">
+                <h2>3</h2><p>Create a new playlist</p>
+            </div>
+            <div class="onboardingItem">
+                <h2>4</h2><p>Get recommendations</p>
+            </div>
+            <div class="onboardingItem">
+                <h2>5</h2><p>Add new tracks</p>
+            </div>
+        </div>
+
+        <!--connect to spotify-->
+        <div id="connectSpotifyBtn" class="flex-container">
+            <button type="button" class="btn btn-secondary btn-lg" onclick="getAuthorization()">Connect to Spotify</button>
         </div>
 
         <!--select location / weather-->
-        <div class="input-group mb-3">
+        <div id="cityInputText" class="input-group mb-3 flex-container">
           <input id="cityLocationInput" type="text" class="form-control" placeholder="your city" aria-label="your city" aria-describedby="basic-addon2">
-          <div class="input-group-append">
+          <div id="cityInputSubmit">
             <button class="btn btn-outline-secondary" type="button" onclick="getLocationKey()">search</button>
           </div>
         </div>
@@ -53,15 +72,17 @@ MVP to do:
 
         <!--display weather-->
         <i class="wi" id="weatherIcon"></i>
-        <button type="button" class="btn btn-primary" onclick="createNewPlaylist()">playlist create</button>
-        <button type="button" class="btn btn-primary" onclick="getRecommendations()">get recs</button>
-        <button type="button" class="btn btn-primary" onclick="addTracksToPlaylist()">add track test</button>
+        <div class="flex-container">
+            <button type="button" class="btn btn-primary" onclick="createNewPlaylist()">playlist create</button>
+            <button type="button" class="btn btn-primary" onclick="getRecommendations()">get recs</button>
+            <button type="button" class="btn btn-primary" onclick="addTracksToPlaylist()">add track test</button>
+        </div>
 
 
 
         <!--generated playlist -->
-        <div id="hihi">
-            <!-- <iframe id="hi" src="https://open.spotify.com/embed/album/1DFixLWuPkv3KT3TnV35m3" width="640" height="720" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>-->
+        <div id="playlistDisplayContainer" class="flex-container">
+            <iframe src="https://open.spotify.com/embed/playlist/3tFXti3D8PHqc9O01vnfPj" width="700" height="500" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
         </div>
         
         <!-- Optional JavaScript -->

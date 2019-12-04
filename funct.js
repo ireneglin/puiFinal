@@ -196,6 +196,7 @@ function createNewPlaylist(){//callback){
 	};
 	request();
 	//callback();
+	//displayPlaylistOnHome();
 }
 
 //make rec URL spotify:playlist:3vQAo3evqhXylSJUQZV85j
@@ -245,12 +246,12 @@ function buildRecommendationURL(weather) {
 	console.log("weather", weather);
 	console.log("curr w", currWeather);
 
-	if (weather === 1) {
+	if (1 <= weather <= 5) {
 		builtURL = builderHelper(sunny);
 		currWeather = "sunny";
 		console.log("curr sunny", currWeather);
 	} 
-	else if (1 < weather <= 11) {
+	else if (5 < weather <= 11) {
 		builtURL = builderHelper(cloudy);
 		currWeather = "cloudy";
 		console.log("curr cloud", currWeather);

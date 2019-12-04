@@ -1,16 +1,81 @@
+.flex-container {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  
+  -webkit-flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+.onboardingItem {
+	border-width: 2px;
+	border-color: black;
+	border-style: solid;
+	padding: 5px;
+	width: 200px;
+	height: 150px;
+	margin-top: 30px;
+
+	line-height: 150px;
+	color: black;
+	font-weight: bold;
+	text-align: center;
+}
+
+
+#siteMainTitle {
+	font-size: 4.5em;
+	margin: 20px;
+	overflow: hidden;
+}
+
+#connectSpotifyBtn { 
+	margin: 20px;
+}
+
+#cityInputText {
+	margin: 20px;
+}
+
+#playlistDisplayContainer {
+	margin: 20px;
+}
+
+#cityInputText {
+	margin: 100px;
+}
+
+@media only screen and (min-width: 798px) {
+	//#connectSpotifyBtn { width: 30%; }
+	#siteMainTitle {font-size: 6em;}
+}
+
+
+
+
+
+
+
+
+
+
+/* accuweather icon font from https://codepen.io/fefro/pen/gryWPK*/
+
 .wi {
 		line-height: 1.4;
 		*padding: 15px;
 		font-size: 50px;
 }
-/* accuweather icons */
+
 /*sunny*/
 .icon-accu01:before {content: "\f00d";}
-/*cloudy*/
 .icon-accu02:before {content: "\f002";}
 .icon-accu03:before {content: "\f002";}
 .icon-accu04:before {content: "\f07d";}
 .icon-accu05:before {content: "\f003";}
+/*cloudy*/
 .icon-accu06:before {content: "\f002";}
 .icon-accu07:before {content: "\f013";}
 .icon-accu08:before {content: "\f00c";}
@@ -55,5 +120,4 @@
 .icon-accu42:before {content: "\f02d";}
 .icon-accu43:before {content: "\f02a";}
 .icon-accu44:before {content: "\f02a";}
-
 
