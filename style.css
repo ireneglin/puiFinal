@@ -1,12 +1,18 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:900i&display=swap');
+.titleDiv {
+	width: 100%;
+	height: 100%;
+}
+
 .flex-container {
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  
-  -webkit-flex-flow: row wrap;
-  justify-content: space-around;
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+
+	-webkit-flex-flow: row wrap;
+	justify-content: space-around;
 }
 
 .onboardingItem {
@@ -32,11 +38,10 @@
 }
 
 #connectSpotifyBtn { 
-	margin: 20px;
-}
-
-#cityInputText {
-	margin: 20px;
+	width: 50%;
+	margin: auto;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 #playlistDisplayContainer {
@@ -44,21 +49,162 @@
 }
 
 #cityInputText {
-	margin: 100px;
+	width: 50%;
+	margin: auto;
 }
 
-@media only screen and (min-width: 798px) {
+@media only screen and (max-width: 900px) {
 	//#connectSpotifyBtn { width: 30%; }
-	#siteMainTitle {font-size: 6em;}
+	#titleSpan {font-size: 50px;}
+}
+
+/**/
+span{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size:120px;
+	letter-spacing:0.1em;
+	-webkit-text-fill-color: transparent;
+	-webkit-text-stroke-width: 3px;
+	-webkit-text-stroke-color: white;
+	text-shadow: 
+						8px 8px #ff1f8f,
+						20px 20px #000000;
 }
 
 
 
 
+/*reflection buttons*/
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html,
+body {
+	box-sizing: border-box;
+	height: 100%;
+	width: 100%;
+}
+
+body {
+	//background: #FFF;
+	font-weight: 400;
+	background:yellow;
+	font-family: 'Montserrat', sans-serif;
+}
+
+.buttons {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	text-align: center;
+	width: 100%;
+	height: 100%;
+	margin: 0 auto;
+/*   padding: 2em 0em; */
+}
+
+.container {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	text-align: center;
+	background-color: #FFF;
+	padding:  40px 0px;
+	width: 240px;
+}
+
+h1 {
+	//text-align: left;
+	color: #444;
+	letter-spacing: 0.05em;
+	margin: 0 0 0.4em;
+	font-size: 1em;
+}
+
+p {
+	//text-align: left;
+	color: #444;
+	letter-spacing: 0.05em;
+	font-size: 0.8em;
+	margin: 0 0 2em;
+}
 
 
+.butn {
+	letter-spacing: 0.1em;
+	cursor: pointer;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 45px;
+	max-width: 160px;
+	position: relative;
+	text-decoration: none;
+	text-transform: uppercase;
+	width: 100%;
+	font-family: 'Noto Sans JP', sans-serif;
+}
+.butn:hover {
+	text-decoration: none;
+}
 
+/*btn_background*/
+.effect01 {
+	color: #FFF;
+	border: 4px solid #000;
+	box-shadow:0px 0px 0px 1px #000 inset;
+	background-color: #000;
+	overflow: hidden;
+	position: relative;
+	transition: all 0.3s ease-in-out;
+}
+.effect01:hover {
+	border: 4px solid #666;
+	background-color: #FFF;
+	box-shadow:0px 0px 0px 4px #EEE inset;
+}
 
+/*btn_text*/
+.effect01 span {
+	transition: all 0.2s ease-out;
+	z-index: 2;
+}
+.effect01:hover span{
+	letter-spacing: 0.13em;
+	color: #333;
+}
+
+/*highlight*/
+.effect01:after {
+	background: #FFF;
+	border: 0px solid #000;
+	content: "";
+	height: 155px;
+	left: -75px;
+	opacity: .8;
+	position: absolute;
+	top: -50px;
+	-webkit-transform: rotate(35deg);
+	    transform: rotate(35deg);
+	width: 50px;
+	transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1);/*easeOutCirc*/
+	z-index: 1;
+}
+
+.effect01:hover:after {
+	background: #FFF;
+	border: 20px solid #000;
+	opacity: 0;
+	left: 120%;
+	-webkit-transform: rotate(40deg);
+	      transform: rotate(40deg);
+}
 
 
 /* accuweather icon font from https://codepen.io/fefro/pen/gryWPK*/
@@ -70,54 +216,88 @@
 }
 
 /*sunny*/
-.icon-accu01:before {content: "\f00d";}
-.icon-accu02:before {content: "\f002";}
-.icon-accu03:before {content: "\f002";}
-.icon-accu04:before {content: "\f07d";}
-.icon-accu05:before {content: "\f003";}
+.icon-accu01:before {content: "\f00d";font-size: 6em !important}
+.icon-accu02:before {content: "\f002";font-size: 6em !important}
+.icon-accu03:before {content: "\f002";font-size: 6em !important}
+.icon-accu04:before {content: "\f07d";font-size: 6em !important}
+.icon-accu05:before {content: "\f003";font-size: 6em !important}
 /*cloudy*/
-.icon-accu06:before {content: "\f002";}
-.icon-accu07:before {content: "\f013";}
-.icon-accu08:before {content: "\f00c";}
+.icon-accu06:before {content: "\f002";font-size: 6em !important}
+.icon-accu07:before {content: "\f013";font-size: 6em !important}
+.icon-accu08:before {content: "\f00c";font-size: 6em !important}
 /*.icon-accu09:before {content: "\f0d7";}*/
 /*.icon-accu10:before {content: "\f0d8";}*/
-.icon-accu11:before {content: "\f014";}
+.icon-accu11:before {content: "\f014";font-size: 6em !important}
 /*rainy*/
-.icon-accu12:before {content: "\f01a";}
-.icon-accu13:before {content: "\f009";}
-.icon-accu14:before {content: "\f009";}
-.icon-accu15:before {content: "\f01e";}
-.icon-accu16:before {content: "\f010";}
-.icon-accu17:before {content: "\f010";}
-.icon-accu18:before {content: "\f019";}
+.icon-accu12:before {content: "\f01a";font-size: 6em !important}
+.icon-accu13:before {content: "\f009";font-size: 6em !important}
+.icon-accu14:before {content: "\f009";font-size: 6em !important}
+.icon-accu15:before {content: "\f01e";font-size: 6em !important}
+.icon-accu16:before {content: "\f010";font-size: 6em !important}
+.icon-accu17:before {content: "\f010";font-size: 6em !important}
+.icon-accu18:before {content: "\f019";font-size: 6em !important}
 /*snowy*/
-.icon-accu19:before {content: "\f01b";}
-.icon-accu20:before {content: "\f00a";}
-.icon-accu21:before {content: "\f00a";}
-.icon-accu22:before {content: "\f01b";}
-.icon-accu23:before {content: "\f00a";}
-.icon-accu24:before {content: "\f076";}
-.icon-accu25:before {content: "\f0b5";}
-.icon-accu26:before {content: "\f015";}
+.icon-accu19:before {content: "\f01b";font-size: 6em !important}
+.icon-accu20:before {content: "\f00a";font-size: 6em !important}
+.icon-accu21:before {content: "\f00a";font-size: 6em !important}
+.icon-accu22:before {content: "\f01b";font-size: 6em !important}
+.icon-accu23:before {content: "\f00a";font-size: 6em !important}
+.icon-accu24:before {content: "\f076";font-size: 6em !important}
+.icon-accu25:before {content: "\f0b5";font-size: 6em !important}
+.icon-accu26:before {content: "\f015";font-size: 6em !important}
 /*.icon-accu27:before {content: "\f0e9";}*/
 /*.icon-accu28:before {content: "\f0ea";}*/
-.icon-accu29:before {content: "\f017";}
-.icon-accu30:before {content: "\f055";}/*temperature*/
-.icon-accu31:before {content: "\f053";}/*temperature*/
-.icon-accu32:before {content: "\f012";}/*windy??*/
+.icon-accu29:before {content: "\f017";font-size: 6em !important}
+.icon-accu30:before {content: "\f055";font-size: 6em !important}/*temperature*/
+.icon-accu31:before {content: "\f053";font-size: 6em !important}/*temperature*/
+.icon-accu32:before {content: "\f012";font-size: 6em !important}/*windy??*/
 
 
 /* night */
-.icon-accu33:before {content: "\f02e";}
-.icon-accu34:before {content: "\f086";}
-.icon-accu35:before {content: "\f086";}
-.icon-accu36:before {content: "\f086";}
-.icon-accu37:before {content: "\f04a";}
-.icon-accu38:before {content: "\f086";}
-.icon-accu39:before {content: "\f029";}
-.icon-accu40:before {content: "\f029";}
-.icon-accu41:before {content: "\f02d";}
-.icon-accu42:before {content: "\f02d";}
-.icon-accu43:before {content: "\f02a";}
-.icon-accu44:before {content: "\f02a";}
+.icon-accu33:before {content: "\f02e";font-size: 6em !important}
+.icon-accu34:before {content: "\f086";font-size: 6em !important}
+.icon-accu35:before {content: "\f086";font-size: 6em !important}
+.icon-accu36:before {content: "\f086";font-size: 6em !important}
+.icon-accu37:before {content: "\f04a";font-size: 6em !important}
+.icon-accu38:before {content: "\f086";font-size: 6em !important}
+.icon-accu39:before {content: "\f029";font-size: 6em !important}
+.icon-accu40:before {content: "\f029";font-size: 6em !important}
+.icon-accu41:before {content: "\f02d";font-size: 6em !important}
+.icon-accu42:before {content: "\f02d";font-size: 6em !important}
+.icon-accu43:before {content: "\f02a";font-size: 6em !important}
+.icon-accu44:before {content: "\f02a";font-size: 6em !important}
 
+
+
+/*
+//Gradient colors background
+body {
+	margin: 0;
+	width: 100%;
+	height: 100vh;
+	font-family: "Exo", sans-serif;
+	color: #fff;
+	background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+	background-size: 400% 400%;
+	animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+.gradientContainer {
+	width: 100%;
+	position: absolute;
+	top: 35%;
+	text-align: center;
+}
+*/

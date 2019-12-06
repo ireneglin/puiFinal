@@ -16,6 +16,7 @@ var userID;
 
 var trackURIs;
 var playlistID;
+var builtURL;
 
 //organize weather-mood pair into dictionary
 var sunny = {
@@ -48,7 +49,7 @@ var rainy = {
 }
 
 var snowy = {
-	seed_genres: "sleep%2Cambient%2Crainy-day%2Csoundtracks%2Cholidays",
+	seed_genres: "sleep%2Cambient%2Crainy-day%2Cholidays",
 	min_valence: 0.4,
 	max_valence: 0.6,
 	max_dancibility: 0.3,
@@ -58,7 +59,7 @@ var snowy = {
 }
 
 var night = {
-	seed_genres: "sleep%2Cambient%2Cchill%2Cacoustic%2Csad%2Csoundtracks",
+	seed_genres: "sleep%2Csoundtracks%2Cchill%2Cacoustic%2Csad",
 	max_valence: 0.3,
 	max_dancibility: 0.2,
 	max_energy: 0.3,
@@ -93,14 +94,18 @@ function getLocationKey() {
 function hourWeatherDisplayHelper(iconNum) {
 	//delete all class before adding new classes
 	document.getElementById("weatherIcon").className = '';
+	//document.getElementById("weatherText").innerHTML = 
 
 	//add new classes
 	document.getElementById("weatherIcon").classList.add("wi");
 	if (iconNum >= 10) {
 		document.getElementById("weatherIcon").classList.add("icon-accu"+iconNum);
+		document.getElementById("weatherIcon").scrollIntoView();
 	} else {
 		document.getElementById("weatherIcon").classList.add("icon-accu0"+iconNum);
+		document.getElementById("weatherIcon").scrollIntoView();
 	}
+	console.log("iconnum", iconNum);
 
 	//buildRecommendationURL(iconNum);
 }
@@ -114,8 +119,10 @@ function getHourWeather(locationKey) {
 		.then(data => {
 		//assign weather forecast to global variable
 		weatherForecast = data[0].WeatherIcon;
-		buildRecommendationURL(weatherForecast);
+		builtURL= buildRecommendationURL(weatherForecast);
+		console.log("weatherForecast", weatherForecast)
 		hourWeatherDisplayHelper(data[0].WeatherIcon);
+
 	});
 }
 
@@ -173,7 +180,8 @@ function displayPlaylistOnHome() {
 	var iframe = "<iframe src=\"https://open.spotify.com/embed/playlist/" + playlistID
 				+ "\" width=\"640\" height=\"720\" frameborder=\"0\" allowtransparency=\"true\""
 				+ " allow=\"encrypted-media\"></iframe>";
-	document.getElementById("hihi").innerHTML = iframe;
+	document.getElementById("playlistDisplayContainer").innerHTML = iframe;
+	document.getElementById("playlistDisplayContainer").scrollIntoView();
 }
 
 //create a new playlist
@@ -246,22 +254,23 @@ function buildRecommendationURL(weather) {
 	console.log("weather", weather);
 	console.log("curr w", currWeather);
 
-	if (1 <= weather <= 5) {
+
+	if (weather > 0 && weather <= 5) {
 		builtURL = builderHelper(sunny);
 		currWeather = "sunny";
 		console.log("curr sunny", currWeather);
 	} 
-	else if (5 < weather <= 11) {
+	else if (weather > 5 && weather <= 11) {
 		builtURL = builderHelper(cloudy);
 		currWeather = "cloudy";
 		console.log("curr cloud", currWeather);
 	} 
-	else if (11 < weather <= 18) {
+	else if (weather > 11 && weather <= 18) {
 		builtURL = builderHelper(rainy);
 		currWeather = "rainy";
 		console.log("curr rain", currWeather);
 	} 
-	else if (18 < weather <= 32) {
+	else if (weather > 18 && weather <= 32) {
 		builtURL = builderHelper(snowy);
 		currWeather = "snowy";
 		console.log("curr snow", currWeather);
@@ -277,7 +286,7 @@ function buildRecommendationURL(weather) {
 
 //fetch recommendations from spotify
 function getRecommendations(){//callback) {
-	var builtURL = buildRecommendationURL(weatherForecast);
+	//builtURL = buildRecommendationURL(weatherForecast);
 	//var url = urlName[0];
 	const request = async () => {
 	    const response = await fetch(builtURL, {
@@ -300,4 +309,8 @@ function getRecommendations(){//callback) {
 	console.log("get rekd");
 	console.log(trackURIs);
 }
+
+/*https://api.spotify.com/v1/recommendations?
+seed_genres=sleep%2Cambient%2Cchill%2Cacoustic%2Csad%2Csoundtracks
+&max_valence=0.3&max_dancibility=0.2&max_energy=0.3&min_popularity=50*/
 
