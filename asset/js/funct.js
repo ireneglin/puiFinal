@@ -73,7 +73,7 @@ function locationInputGetter() {
 	var city = document.getElementById("cityLocationInput").value;
 	var newLocationURL = locationURL.concat("?apikey=", apiKey, "&q=", city);
 	if (city == "") {
-		alert("please input valid US city");
+		alert("please input valid city");
 	}
 	return newLocationURL;
 }
@@ -149,9 +149,9 @@ function getAccessToken() {
 	if (currURL.includes("access_token",22) == true) {
 		token = window.location.hash.replace(/(#access_token=)/, "");
 		accessToken = token.replace(/(&token_type=Bearer&expires_in=3600)/, "");
-	} /*else {
+	} else {
 		alert("Please log in with your Spotify account for full access to features!");
-	}*/
+	}
 	getUserID();
 }
 
