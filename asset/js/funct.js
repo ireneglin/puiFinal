@@ -132,7 +132,7 @@ function getHourWeather(locationKey) {
 function getAuthorization() {
 	var url = "https://accounts.spotify.com/authorize";
 	var newURL = url.concat("?client_id=", clientID,
-		"&redirect_uri=http://localhost:8000", //https://ireneglin.github.io/puiFinal/,
+		"&redirect_uri=https://ireneglin.github.io/puiFinal/",
 		"&scope=playlist-modify-public%20playlist-modify-private",
 		"&response_type=token");
 
