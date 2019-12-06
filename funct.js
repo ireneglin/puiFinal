@@ -181,6 +181,7 @@ function displayPlaylistOnHome() {
 				+ "\" width=\"640\" height=\"720\" frameborder=\"0\" allowtransparency=\"true\""
 				+ " allow=\"encrypted-media\"></iframe>";
 	document.getElementById("playlistDisplayContainer").innerHTML = iframe;
+	document.getElementById("addTtoPP").innerHTML = "Check out the tracks below!";
 	document.getElementById("playlistDisplayContainer").scrollIntoView();
 }
 
@@ -203,6 +204,7 @@ function createNewPlaylist(){//callback){
 		console.log("pl id", playlistID);
 	};
 	request();
+	document.getElementById("creatPlaylistP").innerHTML = "Playlist created!";
 	//callback();
 	//displayPlaylistOnHome();
 }
@@ -308,6 +310,7 @@ function getRecommendations(){//callback) {
 	request();
 	console.log("get rekd");
 	console.log(trackURIs);
+	document.getElementById("getRecsP").innerHTML = "Got recommendations! Add tracks!";
 }
 
 /*https://api.spotify.com/v1/recommendations?

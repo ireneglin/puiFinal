@@ -73,19 +73,22 @@ MVP to do:
         </div>
 
 
-
-
         <!--display weather-->
         <div class="flex-container">
-            <div>
-                <i class="wi flex-container weatherIconDiv" id="weatherIcon"></i>
-                <p id="weatherText"></p>
+            <div class="weatherIconDiv">
+                <i class="wi" id="weatherIcon"></i>
             </div>
         </div>
+
         <div class="flex-container reflectBtn">
             <button type="button" class="butn effect01" onclick="createNewPlaylist()">playlist create</button>
             <button type="button" class="butn effect01" onclick="getRecommendations()">get recs</button>
             <button type="button" class="butn effect01" onclick="addTracksToPlaylist()">add track test</button>
+        </div>
+        <div class="flex-container">
+            <p id="creatPlaylistP" class="buttonMsg"></p>
+            <p id="getRecsP" class="buttonMsg"></p>
+            <p id="addTtoPP" class="buttonMsg"></p>
         </div>
 
 
